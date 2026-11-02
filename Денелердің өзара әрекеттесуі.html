@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="kk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Денелердің өзара әрекеттесуі</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#eef8ff;--bg2:#cfe9fb;--ink:#12324d;--card:#fff;--line:#c4dcee;--blue:#1f6fb2;--ok:#1d9a55;--bad:#b4551f;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#10263a;--bg2:#0c1b2b;--ink:#e6f2fc;--card:#173149;--line:#2b4b68}}
+:root[data-theme="dark"]{--bg1:#10263a;--bg2:#0c1b2b;--ink:#e6f2fc;--card:#173149;--line:#2b4b68}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%}
+body{background:linear-gradient(160deg,var(--bg1),var(--bg2)) fixed;color:var(--ink);font:400 15px/1.45 'Noto Sans',system-ui,sans-serif}
+main{max-width:880px;margin:0 auto;padding:10px 12px 18px}
+h1{margin:4px 0 2px;font:800 clamp(19px,4.3vw,27px)/1.15 'Noto Sans',sans-serif;color:var(--blue);text-align:center}
+.sub{text-align:center;margin:0 0 8px;font-size:14px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.b{font:700 14px/1.15 'Noto Sans',system-ui,sans-serif;color:#fff;background:linear-gradient(#45a0ea,#1f6fb2);border:0;border-radius:12px;padding:10px 8px;box-shadow:0 5px 0 #14507f,0 9px 14px rgba(20,80,127,.3);cursor:pointer;transition:transform .12s,box-shadow .12s,filter .12s}
+.b:hover{filter:brightness(1.08)}.b:active{transform:translateY(4px);box-shadow:0 1px 0 #14507f}
+.b.on{background:linear-gradient(#f4c34f,#dca21c);color:#3a2900;box-shadow:0 5px 0 #96700f,0 9px 14px rgba(150,112,15,.35)}
+.b.g{background:linear-gradient(#5fcf8c,#1d9a55);box-shadow:0 5px 0 #136b3a,0 9px 14px rgba(19,107,58,.3)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #7b4fc0;outline-offset:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:0 8px 20px rgba(20,60,100,.14)}
+canvas{width:100%;height:auto;max-height:44vh;display:block;border-radius:12px;background:linear-gradient(#fafdff,#d8ecfb);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.sl{flex:1;min-width:170px;font-size:14px}.sl input{width:100%;accent-color:var(--blue)}
+.info{padding:8px 10px;border-left:5px solid #dca21c;background:rgba(220,162,28,.14);border-radius:8px;min-height:3em}
+.chip{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:3px 12px;font-size:14px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}th,td{border:1px solid var(--line);padding:3px 5px;text-align:center}th{background:rgba(31,111,178,.12)}
+.q{border-top:1px dashed var(--line);padding:8px 0}.q:first-child{border-top:0}
+.q p{margin:0 0 4px;font-weight:600}.q label{display:block;padding:3px 0;cursor:pointer}.q .b{margin-top:6px;padding:8px 14px}
+textarea{width:100%;min-height:46px;font:inherit;color:var(--ink);background:var(--bg1);border:1px solid var(--line);border-radius:8px;padding:6px;margin:2px 0 8px}
+.fb{margin-top:6px;padding:6px 10px;border-radius:8px}.fb:empty{display:none}
+.fb.g{background:rgba(29,154,85,.16);border-left:5px solid var(--ok)}.fb.w{background:rgba(180,85,31,.14);border-left:5px solid var(--bad)}
+@media(max-width:560px){.tabs{grid-template-columns:repeat(2,1fr)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><main>
+<h1>ДЕНЕЛЕРДІҢ ӨЗАРА ӘРЕКЕТТЕСУІ ЖӘНЕ МАССАЛАРДЫҢ ҚАТЫНАСЫ</h1>
+<p class="sub">Тәжірибе жүргіз, жылдамдықтарды салыстыр &nbsp; <span class="chip" id="sc">Ұпай: 0/4</span></p>
+<div class="tabs" id="mt"><button class="b on" onclick="show(0)">1. Екі арба</button><button class="b" onclick="show(1)">2. Зерттеу</button><button class="b" onclick="show(2)">3. Конькишілер</button><button class="b" onclick="show(3)">4. Қорытынды</button></div>
+
+<section class="card pn" id="p0"><canvas id="c1" width="640" height="290" aria-label="Серіппе арқылы әрекеттесетін екі арба"></canvas>
+<div class="row"><label class="sl">1-арба массасы: <b id="m1v">2</b> кг<input type="range" min="1" max="5" value="2" oninput="setA('m1',this.value)"></label>
+<label class="sl">2-арба массасы: <b id="m2v">4</b> кг<input type="range" min="1" max="5" value="4" oninput="setA('m2',this.value)"></label>
+<label class="sl">Серіппенің сығылуы: <b id="kv">2</b><input type="range" min="1" max="3" value="2" oninput="setA('k',this.value)"></label></div>
+<div class="row"><button class="b g" onclick="relA()">Серіппені босату</button><button class="b" onclick="resA()">Қайта бастау</button></div>
+<div class="info" id="i1"></div>
+<table><thead><tr><th>№</th><th>m₁, кг</th><th>m₂, кг</th><th>v₁, м/с</th><th>v₂, м/с</th><th>m₂ : m₁</th><th>v₁ : v₂</th></tr></thead><tbody id="tb"></tbody></table></section>
+
+<section class="card pn" id="p1" hidden><h3 style="margin:2px 0 6px">Массалар қатынасын анықта</h3>
+<p style="margin:0 0 6px">Тәжірибе нәтижесін (кестені) қарап, жауап жаз.</p>
+<label>1. Өзара әрекеттесу кезінде екі дененің жылдамдығы қалай өзгереді?<textarea id="r0"></textarea></label>
+<label>2. Қай дененің жылдамдығы көбірек өзгереді?<textarea id="r1"></textarea></label>
+<label>3. Массасы үлкен дененің жылдамдығы қалай өзгереді?<textarea id="r2"></textarea></label>
+<label>4. Массалар мен жылдамдық өзгерістерінің арасында қандай байланыс бар?<textarea id="r3"></textarea></label>
+<label><b>Қорытынды:</b><textarea id="r4"></textarea></label>
+<button class="b" onclick="mdl()">Үлгі жауапты көрсет</button><div class="fb" id="mf" role="status"></div></section>
+
+<section class="card pn" id="p2" hidden><canvas id="c3" width="640" height="290" aria-label="Мұз айдынындағы екі конькиші"></canvas>
+<div class="row"><label class="sl">1-конькиші массасы: <b id="s1v">40</b> кг<input type="range" min="40" max="100" step="10" value="40" oninput="setS('m1',this.value)"></label>
+<label class="sl">2-конькиші массасы: <b id="s2v">80</b> кг<input type="range" min="40" max="100" step="10" value="80" oninput="setS('m2',this.value)"></label></div>
+<div class="row"><button class="b g" onclick="relS()">Итеру</button><button class="b" onclick="resS()">Қайта бастау</button></div>
+<div class="info" id="i3"></div></section>
+
+<section class="card pn" id="p3" hidden><div id="t"></div><div class="fb" id="res" role="status"></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),fm=n=>n.toFixed(1).replace('.',',');
+function show(i){document.querySelectorAll('.pn').forEach((p,k)=>p.hidden=k!=i);document.querySelectorAll('#mt .b').forEach((b,k)=>b.classList.toggle('on',k==i))}
+const sc={q:new Set,a:0,s:0};
+function upd(){$('#sc').textContent='Ұпай: '+sc.q.size+'/4';result()}
+function box(c,x,y,w,h,d,f,t,s){c.fillStyle=f;c.fillRect(x,y,w,h);c.fillStyle=t;c.beginPath();c.moveTo(x,y);c.lineTo(x+d,y-d);c.lineTo(x+w+d,y-d);c.lineTo(x+w,y);c.fill();c.fillStyle=s;c.beginPath();c.moveTo(x+w,y);c.lineTo(x+w+d,y-d);c.lineTo(x+w+d,y+h-d);c.lineTo(x+w,y+h);c.fill()}
+function txt(c,t,x,y,sz,col,al='center',wt=700){c.fillStyle=col;c.font=`${wt} ${sz}px 'Noto Sans',sans-serif`;c.textAlign=al;c.fillText(t,x,y)}
+function arrow(c,x1,x2,y,w,col){const s=Math.sign(x2-x1)||1;c.strokeStyle=c.fillStyle=col;c.lineWidth=w;c.beginPath();c.moveTo(x1,y);c.lineTo(x2-s*9,y);c.stroke();c.beginPath();c.moveTo(x2,y);c.lineTo(x2-s*13,y-7);c.lineTo(x2-s*13,y+7);c.fill()}
+/* ---- carts ---- */
+const c1=$('#c1').getContext('2d'),CW=84,SC=20,RY=205;let A,log=[];
+function resA(){const g=A?{m1:A.m1,m2:A.m2,k:A.k}:{m1:2,m2:4,k:2};A={...g,t:-1,x1:221,x2:335,v1:0,v2:0,run:false,done:false};info1()}
+function setA(k,v){if(A.run)return;A[k]=+v;$({m1:'#m1v',m2:'#m2v',k:'#kv'}[k]).textContent=v;if(A.t>=0||A.done)resA()}
+function relA(){if(A.run)return;if(A.t>=0||A.done)resA();A.run=true;A.t=0;sc.a++;$('#i1').textContent='Серіппе босатылды! Екі арба қарама-қарсы бағытта қозғалып барады.'}
+function info1(){$('#i1').textContent='Серіппе қысылып, арбаларды жіппен ұстап тұр. Массаларды таңда да, «Серіппені босату» батырмасын бас.'}
+function stepA(dt){if(!A.run)return;const J=4*A.k;A.t+=dt;
+ if(A.t<.25){A.v1-=J/A.m1/.25*dt;A.v2+=J/A.m2/.25*dt}else{A.v1=-J/A.m1;A.v2=J/A.m2}
+ A.x1+=A.v1*SC*dt;A.x2+=A.v2*SC*dt;
+ if(A.x1<6||A.x2+CW>634||A.t>9){A.run=false;A.done=true;const a=Math.abs(A.v1),b=A.v2;log.push([A.m1,A.m2,a,b]);log=log.slice(-6);
+  $('#tb').innerHTML=log.map((r,i)=>`<tr><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${fm(r[2])}</td><td>${fm(r[3])}</td><td>${fm(r[1]/r[0])}</td><td>${fm(r[2]/r[3])}</td></tr>`).join('');
+  $('#i1').textContent=A.m1==A.m2?`Массалары тең (${A.m1} кг), сондықтан жылдамдықтары да тең: ${fm(a)} м/с.`:`v₁ = ${fm(a)} м/с, v₂ = ${fm(b)} м/с. ${A.m1<A.m2?'Жеңіл':'Ауыр'} арба ${fm(Math.max(a,b)/Math.min(a,b))} есе ${a>b?'жылдамырақ':'баяу'} қозғалды. Кестедегі m₂ : m₁ және v₁ : v₂ қатынастарын салыстыр.`;upd()}}
+function cart(c,x,m,col,i,v){const yp=RY-24;
+ c.fillStyle='rgba(20,60,100,.2)';c.beginPath();c.ellipse(x+CW/2+6,RY+3,CW/2+10,5,0,0,6.3);c.fill();
+ for(let k=0;k<m;k++)box(c,x+6+k*15,yp-15,14,14,5,'#7f8c99','#b4bfca','#5d6a77');
+ box(c,x,yp,CW,12,12,col[0],col[1],col[2]);
+ [x+16,x+CW-16].forEach(wx=>{c.fillStyle='#22323f';c.beginPath();c.arc(wx,RY-7,8,0,6.3);c.fill();c.fillStyle='#9fb2c2';c.beginPath();c.arc(wx,RY-7,3,0,6.3);c.fill()});
+ txt(c,`m${i} = ${m} кг`,x+CW/2+6,RY+34,13,'#12324d');
+ if(Math.abs(v)>.01){arrow(c,x+CW/2,x+CW/2+v*16,yp-52,3.5,'#1d9a55');txt(c,`v${i} = ${fm(Math.abs(v))} м/с`,x+CW/2,yp-62,12,'#1d6a3c')}}
+function spring(c,x1,x2,y){c.strokeStyle='#d9a21b';c.lineWidth=3;c.beginPath();c.moveTo(x1,y);const n=9,w=(x2-x1)/n;for(let i=1;i<n;i++)c.lineTo(x1+i*w,y+(i%2?-9:9));c.lineTo(x2,y);c.stroke()}
+function drawA(){const c=c1,yp=RY-24;c.clearRect(0,0,640,290);box(c,10,RY,620,10,14,'#9fb2c2','#d6e2ec','#7b8fa1');
+ const gap=A.x2-(A.x1+CW);spring(c,A.x1+CW,A.x1+CW+Math.min(gap,70),yp+6);
+ if(A.t<0){c.strokeStyle='#d1341f';c.lineWidth=2;c.setLineDash([4,3]);c.beginPath();c.moveTo(A.x1+CW-4,yp-2);c.lineTo(A.x2+4,yp-2);c.stroke();c.setLineDash([]);txt(c,'жіп',(A.x1+CW+A.x2)/2,yp-8,10,'#d1341f','center',600)}
+ cart(c,A.x1,A.m1,['#2bb3c9','#7ddbe9','#1b8296'],1,A.v1);cart(c,A.x2,A.m2,['#d9a21b','#f3cf6b','#9c7410'],2,A.v2);
+ txt(c,'Рельс',320,RY+60,11,'#4a6a85','center',400)}
+/* ---- skaters ---- */
+const c3=$('#c3').getContext('2d'),SS=30;let K;
+function resS(){const g=K?{m1:K.m1,m2:K.m2}:{m1:40,m2:80};K={...g,t:-1,x1:290,x2:350,v1:0,v2:0,run:false,done:false};$('#i3').textContent='Екі конькиші мұзда тұр. Массаларын таңда да, «Итеру» батырмасын бас.'}
+function setS(k,v){if(K.run)return;K[k]=+v;$(k=='m1'?'#s1v':'#s2v').textContent=v;if(K.t>=0||K.done)resS()}
+function relS(){if(K.run)return;if(K.t>=0||K.done)resS();K.run=true;K.t=0;sc.s++}
+function stepS(dt){if(!K.run)return;const J=80;K.t+=dt;
+ if(K.t<.3){K.v1-=J/K.m1/.3*dt;K.v2+=J/K.m2/.3*dt}else{K.v1=-J/K.m1;K.v2=J/K.m2}
+ K.x1+=K.v1*SS*dt;K.x2+=K.v2*SS*dt;
+ if(K.x1<40||K.x2>600||K.t>12){K.run=false;K.done=true;const a=Math.abs(K.v1),b=K.v2;
+  $('#i3').textContent=`v₁ = ${fm(a)} м/с, v₂ = ${fm(b)} м/с. `+(K.m1==K.m2?'Массалары тең, жылдамдықтары да тең.':`${K.m1<K.m2?'Жеңіл':'Ауыр'} конькиші ${fm(Math.max(a,b)/Math.min(a,b))} есе ${a>b?'жылдамырақ':'баяу'} қозғалды: жылдамдық массаға кері байланысты.`)}}
+function skater(c,x,m,col,i,v){const w=24+(m-40)*.35,h=64+(m-40)*.3,top=205-h-18;
+ c.fillStyle='rgba(20,60,100,.2)';c.beginPath();c.ellipse(x,208,w*.9,6,0,0,6.3);c.fill();
+ c.fillStyle='#34405a';c.fillRect(x-w*.42,205-18,w*.3,16);c.fillRect(x+w*.12,205-18,w*.3,16);
+ c.fillStyle='#b9c6d2';c.fillRect(x-w*.5,205,w*.45,3);c.fillRect(x+w*.05,205,w*.45,3);
+ const g=c.createLinearGradient(x-w/2,0,x+w/2,0);g.addColorStop(0,col[0]);g.addColorStop(.5,col[1]);g.addColorStop(1,col[2]);c.fillStyle=g;c.beginPath();c.roundRect?c.roundRect(x-w/2,top,w,h,8):c.rect(x-w/2,top,w,h);c.fill();
+ c.fillStyle='#f1c9a0';c.beginPath();c.arc(x,top-11,12,0,6.3);c.fill();
+ txt(c,`m${i} = ${m} кг`,x,238,13,'#12324d');
+ if(Math.abs(v)>.01){arrow(c,x,x+v*34,top-42,3.5,'#1d9a55');txt(c,`v${i} = ${fm(Math.abs(v))} м/с`,x,top-52,12,'#1d6a3c')}}
+function drawS(){const c=c3;c.clearRect(0,0,640,290);const g=c.createRadialGradient(320,215,20,320,215,320);g.addColorStop(0,'#ffffff');g.addColorStop(1,'#bfe3f7');c.fillStyle=g;c.beginPath();c.ellipse(320,212,305,62,0,0,6.3);c.fill();c.strokeStyle='#8fb9d6';c.lineWidth=4;c.stroke();
+ if(K.t<0||K.t<.3){const mx=(K.x1+K.x2)/2;c.strokeStyle='#f2c04a';c.lineWidth=5;c.beginPath();c.moveTo(K.x1+14,150);c.lineTo(K.x2-14,150);c.stroke()}
+ skater(c,K.x1,K.m1,['#2b6fdc','#7aa8f0','#1d4ea3'],1,K.v1);skater(c,K.x2,K.m2,['#c0392b','#ee8c80','#8e2a20'],2,K.v2);
+ txt(c,'Мұз айдыны',320,278,11,'#4a6a85','center',400)}
+/* ---- research ---- */
+function mdl(){const f=$('#mf');f.className='fb g';f.innerHTML='<b>Үлгі жауаптар:</b><br>1. Екі дененің де жылдамдығы өзгереді: тыныштықтағы денелер қарама-қарсы бағытта қозғала бастайды.<br>2. Массасы аз (жеңіл) дененің жылдамдығы көбірек өзгереді.<br>3. Массасы үлкен дененің жылдамдығы аз өзгереді.<br>4. Масса неше есе үлкен болса, жылдамдық өзгерісі сонша есе аз: v₁ : v₂ = m₂ : m₁.<br><b>Қорытынды:</b> өзара әрекеттескен денелердің жылдамдық өзгерістері массаларына кері байланысты.'}
+/* ---- questions ---- */
+const Q={};
+function qz(id,q,o,a){Q[id]={o:o.map(x=>x.split('|')),a};return `<div class="q"><p>${q}</p>${Q[id].o.map((x,j)=>`<label><input type="radio" name="r${id}" value="${j}"> ${x[0]}</label>`).join('')}<button class="b" onclick="ck('${id}')">ТЕКСЕРУ</button><div class="fb" id="f${id}" role="status"></div></div>`}
+function ck(id){const r=document.querySelector(`input[name="r${id}"]:checked`),f=$('#f'+id);if(!r){f.className='fb w';f.textContent='Алдымен жауап нұсқасын таңда.';return}
+ const j=+r.value,ok=j==Q[id].a;if(ok)sc.q.add(id);upd();f.className='fb '+(ok?'g':'w');f.textContent=(ok?'✓ Дұрыс! ':'✗ Қате. ')+Q[id].o[j][1]+(ok?' +1 ұпай.':' Қайтадан ойланып көр.')}
+$('#t').innerHTML=
+qz('q1','1. Өзара әрекеттесу кезінде денелер қандай бағытта қозғалады?',['Бір бағытта|Тәжірибеде арбалар мен конькишілер қарама-қарсы жаққа кетті.','Қарама-қарсы бағытта|Серіппе мен итеру денелерді қарама-қарсы жаққа жібереді.','Қозғалмайды|Екі дене де жылдамдық алды.'],1)+
+qz('q2','2. Қай дененің жылдамдығы көбірек өзгереді?',['Массасы үлкен дененің|Массасы үлкен дененің жылдамдығы аз өзгереді.','Массасы аз дененің|Жеңіл дененің жылдамдығы көбірек өзгереді.','Екеуінікі әрқашан бірдей|Тек массалары тең болғанда ғана бірдей.'],1)+
+qz('q3','3. Массасы 2 есе үлкен дененің жылдамдық өзгерісі қалай өзгереді?',['2 есе артады|Керісінше, масса артса, жылдамдық өзгерісі кемиді.','2 есе кемиді|Мысалы, 2 кг арба 2 м/с алса, 4 кг арба 1 м/с алады.','Өзгермейді|Кестеден массасы мен жылдамдығы арасындағы байланысты қара.'],1)+
+qz('q4','4. Денелердің өзара әрекеттесуінде қандай заңдылық байқалады?',['Жылдамдық өзгерістері массаларына тура пропорционал|Ауыр дене баяу қозғалды, демек тура емес.','Жылдамдық өзгерістері массаларына кері байланысты|Масса неше есе үлкен болса, жылдамдық өзгерісі сонша есе аз.','Жылдамдықтың массаға байланысы жоқ|Тәжірибедегі кестеде байланыс анық көрінеді.'],1);
+function result(){const n=sc.q.size,r=$('#res');r.className='fb g';r.innerHTML=`<b>Жалпы ұпай: ${n}/4.</b> ${n==4?'Тамаша! Заңдылықты толық түсіндің.':n==3?'Жақсы! Тағы бір сұраққа назар аудар.':n==2?'Орташа: тәжірибелерді қайта жүргізіп, кестені салыстыр.':'Тәжірибелерді қайталап көр.'}<br>Жасалған тәжірибелер: арбалар — ${sc.a}, конькишілер — ${sc.s}.<br><b>Зерттеу нәтижесі:</b> өзара әрекеттескенде денелер қарама-қарсы бағытта қозғалады, ал жылдамдықтардың қатынасы массалардың кері қатынасына тең: v₁ : v₂ = m₂ : m₁.`}
+resA();resS();upd();
+let last=0;function loop(t){const dt=Math.min(.05,(t-last)/1000||0);last=t;stepA(dt);drawA();stepS(dt);drawS();requestAnimationFrame(loop)}requestAnimationFrame(loop);
+</script></body></html>
